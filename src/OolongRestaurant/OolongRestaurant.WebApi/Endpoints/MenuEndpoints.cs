@@ -2,12 +2,14 @@
 using MapsterMapper;
 using OolongRestaurant.Core.Collections;
 using OolongRestaurant.Core.Entities;
-using OolongRestaurant.Services.Contacts;
+using OolongRestaurant.Services.Menus;
 using OolongRestaurant.Services.Media;
 using OolongRestaurant.WebApi.Filters;
 using OolongRestaurant.WebApi.Models;
-using OolongRestaurant.WebApi.Models.Contact;
+using OolongRestaurant.WebApi.Models.Menu;
 using System.Net;
+using OolongRestaurant.WebApi.Models.Food;
+using OolongRestaurant.Core.Contracts;
 
 namespace OolongRestaurant.WebApi.Endpoints
 {
@@ -18,73 +20,98 @@ namespace OolongRestaurant.WebApi.Endpoints
         {
             var routeGroupBuilder = app.MapGroup("/api/menus");
 
-            routeGroupBuilder.MapGet("/", GetContacts)
-                .WithName("GetContacts")
-                .Produces<ApiResponse<IList<Contact>>>();
+            routeGroupBuilder.MapGet("/", GetMenus)
+                .WithName("GetMenus")
+                .Produces<ApiResponse<IList<Menu>>>();
 
-            routeGroupBuilder.MapGet("/{id:int}", GetContactDetails)
-                .WithName("GetContactById")
-                .Produces<ApiResponse<Contact>>();
+            routeGroupBuilder.MapGet("/{id:int}", GetMenuDetails)
+                .WithName("GetMenuById")
+                .Produces<ApiResponse<MenuDto>>();
 
-            routeGroupBuilder.MapPost("/", AddContact)
-                .WithName("AddNewContact")
-                .AddEndpointFilter<ValidatorFilter<ContactEditModel>>()
+            routeGroupBuilder.MapGet(
+                   "/{slug:regex(^[a-z0-9_-]*$)}/foods",
+                   GetFoodsByMenuSlug)
+               .WithName("GetFoodsByMenuSlug")
+               .Produces<ApiResponse<PaginationResult<FoodDto>>>();
+
+            routeGroupBuilder.MapPost("/", AddMenu)
+                .WithName("AddNewMenu")
+                .AddEndpointFilter<ValidatorFilter<MenuEditModel>>()
                 .Produces(401)
-                .Produces<ApiResponse<Contact>>();
+                .Produces<ApiResponse<Menu>>();
 
-            routeGroupBuilder.MapPut("/{id:int}", UpdateContact)
-              .WithName("UpdateAnContact")
+            routeGroupBuilder.MapPut("/{id:int}", UpdateMenu)
+              .WithName("UpdateAnMenu")
               .Produces(401)
               .Produces<ApiResponse<string>>();
 
-            routeGroupBuilder.MapDelete("/{id:int}", DeleteContact)
-                .WithName("DeleteAnContact")
+            routeGroupBuilder.MapDelete("/{id:int}", DeleteMenu)
+                .WithName("DeleteAnMenu")
                 .Produces(401)
                 .Produces<ApiResponse<string>>();
 
             return app;
         }
 
-        private static async Task<IResult> GetContacts(
-            [AsParameters] ContactFilterModel model,
-            IContactRepository contactRepository)
+        private static async Task<IResult> GetMenus(
+            [AsParameters] MenuFilterModel model,
+            IMenuRepository menuRespository)
         {
-            var contactList = await contactRepository.GetContactsAsync();
+            var menuList = await menuRespository.GetMenusAsync();
 
-            return Results.Ok(ApiResponse.Success(contactList));
+            return Results.Ok(ApiResponse.Success(menuList));
         }
 
-        private static async Task<IResult> GetContactDetails(
+        private static async Task<IResult> GetMenuDetails(
             int id,
-            IContactRepository contactRepository,
+            IMenuRepository menuRepository,
             IMapper mapper)
         {
-            var contact = await contactRepository.GetCachedContactByIdAsync(id);
+            var menu = await menuRepository.GetCachedMenuByIdAsync(id);
 
-            return contact == null
-                ? Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy người liên hệ có mã số {id}"))
-                : Results.Ok(ApiResponse.Success(mapper.Map<Contact>(contact)));
+            return menu == null
+                ? Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy thực đơn có mã số {id}"))
+                : Results.Ok(ApiResponse.Success(mapper.Map<MenuDto>(menu)));
         }
 
+        private static async Task<IResult> GetFoodsByMenuSlug(
+            string slug,
+            IMenuRepository menuRepository,
+            IMapper mapper)
+        {
+            var foodsList = await menuRepository.GetPagedFoodAsync();
+            var list = mapper.Map<IPagedList<FoodDto>>(foodsList);
 
-        private static async Task<IResult> AddContact(
-            ContactEditModel model,
-            IContactRepository contactRepository,
+            var paginationResult = new PaginationResult<FoodDto>(list);
+
+            return Results.Ok(ApiResponse.Success(paginationResult));
+        }
+
+        private static async Task<IResult> AddMenu(
+            MenuEditModel model,
+            IMenuRepository menuRepository,
             IMapper mapper)
         {
 
-            var contact = mapper.Map<Contact>(model);
-            await contactRepository.AddOrUpdateContactAsync(contact);
+            if(await menuRepository
+                .IsMenuSlugExistedAsync(0, model.UrlSlug))
+            {
+                return Results.Conflict(
+                    $"Slug '{model.UrlSlug}' đã được sử dụng");
+            }
+
+            var menu = mapper.Map<Menu>(model);
+            await menuRepository.AddOrUpdateMenuAsync(menu);
 
             return Results.Ok(ApiResponse.Success(
-                mapper.Map<Contact>(contact), HttpStatusCode.Created));
+                mapper.Map<MenuDto>(menu), HttpStatusCode.Created));
         }
 
-        private static async Task<IResult> UpdateContact(
+        private static async Task<IResult> UpdateMenu(
             int id,
-            ContactEditModel model,
-            IValidator<ContactEditModel> validator,
-            IContactRepository contactRepository,
+            MenuEditModel model,
+            IValidator<MenuEditModel> validator,
+            IMenuRepository menuRepository,
             IMapper mapper)
         {
             var validationResult = await validator.ValidateAsync(model);
@@ -94,22 +121,28 @@ namespace OolongRestaurant.WebApi.Endpoints
                 HttpStatusCode.BadRequest, validationResult));
             }
 
-            
-            var contact = mapper.Map<Contact>(model);
-            contact.Id = id;
+            if (await menuRepository.IsMenuSlugExistedAsync(id, model.UrlSlug))
+            {
+                return Results.Ok(ApiResponse.Fail(
+                    HttpStatusCode.Conflict,
+                    $"Slug '{model.UrlSlug}' đã được sử dụng"));
+            }
 
-            return await contactRepository.AddOrUpdateContactAsync(contact)
-                ? Results.Ok(ApiResponse.Success("Người liên hệ được cập nhật", HttpStatusCode.NoContent))
-                : Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, "Không thể tìm thấy người liên hệ"));
+            var menu = mapper.Map<Menu>(model);
+            menu.Id = id;
+
+            return await menuRepository.AddOrUpdateMenuAsync(menu)
+                ? Results.Ok(ApiResponse.Success("Thực đơn đã được cập nhật", HttpStatusCode.NoContent))
+                : Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, "Không thể tìm thấy thực đơn"));
         }
 
-        private static async Task<IResult> DeleteContact(
+        private static async Task<IResult> DeleteMenu(
             int id,
-            IContactRepository contactRepository)
+            IMenuRepository menuRepository)
         {
-            return await contactRepository.DeleteContactByIdAsync(id)
-                ? Results.Ok(ApiResponse.Success("Người liên hệ đã được xóa", HttpStatusCode.NoContent))
-                : Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, "Không thể tìm thấy người liên hệ"));
+            return await menuRepository.DeleteMenuByIdAsync(id)
+                ? Results.Ok(ApiResponse.Success("Thực đơn đã được xóa", HttpStatusCode.NoContent))
+                : Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, "Không thể tìm thấy thực đơn"));
         }
     }
 }

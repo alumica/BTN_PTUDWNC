@@ -3,6 +3,7 @@ using MapsterMapper;
 using OolongRestaurant.Core.Collections;
 using OolongRestaurant.Core.Entities;
 using OolongRestaurant.Services.Contacts;
+using OolongRestaurant.Services.Foods;
 using OolongRestaurant.Services.Media;
 using OolongRestaurant.WebApi.Filters;
 using OolongRestaurant.WebApi.Models;
@@ -18,40 +19,51 @@ namespace OolongRestaurant.WebApi.Endpoints
         {
             var routeGroupBuilder = app.MapGroup("/api/dashboard");
 
-            routeGroupBuilder.MapGet("/", GetContacts)
-                .WithName("GetContacts")
-                .Produces<ApiResponse<IList<Contact>>>();
+            routeGroupBuilder.MapGet("/totalfood", GetTotalFood)
+                .WithName("GetTotalFood")
+                .Produces<ApiResponse<int>>();
 
-            routeGroupBuilder.MapGet("/{id:int}", GetContactDetails)
-                .WithName("GetContactById")
-                .Produces<ApiResponse<Contact>>();
+            routeGroupBuilder.MapGet("/totalcontact", GetTotalContact)
+                .WithName("GetTotalContact")
+                .Produces<ApiResponse<int>>();
 
-            routeGroupBuilder.MapPost("/", AddContact)
-                .WithName("AddNewContact")
-                .AddEndpointFilter<ValidatorFilter<ContactEditModel>>()
-                .Produces(401)
-                .Produces<ApiResponse<Contact>>();
+            //routeGroupBuilder.MapGet("/{id:int}", GetContactDetails)
+            //    .WithName("GetContactById")
+            //    .Produces<ApiResponse<Contact>>();
 
-            routeGroupBuilder.MapPut("/{id:int}", UpdateContact)
-              .WithName("UpdateAnContact")
-              .Produces(401)
-              .Produces<ApiResponse<string>>();
+            //routeGroupBuilder.MapPost("/", AddContact)
+            //    .WithName("AddNewContact")
+            //    .AddEndpointFilter<ValidatorFilter<ContactEditModel>>()
+            //    .Produces(401)
+            //    .Produces<ApiResponse<Contact>>();
 
-            routeGroupBuilder.MapDelete("/{id:int}", DeleteContact)
-                .WithName("DeleteAnContact")
-                .Produces(401)
-                .Produces<ApiResponse<string>>();
+            //routeGroupBuilder.MapPut("/{id:int}", UpdateContact)
+            //  .WithName("UpdateAnContact")
+            //  .Produces(401)
+            //  .Produces<ApiResponse<string>>();
+
+            //routeGroupBuilder.MapDelete("/{id:int}", DeleteContact)
+            //    .WithName("DeleteAnContact")
+            //    .Produces(401)
+            //    .Produces<ApiResponse<string>>();
 
             return app;
         }
 
-        private static async Task<IResult> GetContacts(
-            [AsParameters] ContactFilterModel model,
+        private static async Task<IResult> GetTotalFood(
+            IFoodRepository foodRepository)
+        {
+            int total = await foodRepository.GetTotalFoodAsync();
+
+            return Results.Ok(total);
+        }
+
+        private static async Task<IResult> GetTotalContact(
             IContactRepository contactRepository)
         {
-            var contactList = await contactRepository.GetContactsAsync();
+            int total = await contactRepository.GetTotalContactAsync();
 
-            return Results.Ok(ApiResponse.Success(contactList));
+            return Results.Ok(total);
         }
 
         private static async Task<IResult> GetContactDetails(

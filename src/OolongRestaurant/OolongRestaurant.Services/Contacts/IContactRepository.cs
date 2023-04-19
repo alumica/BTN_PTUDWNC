@@ -27,5 +27,8 @@ namespace OolongRestaurant.Services.Contacts
         Task<bool> DeleteContactByIdAsync(
             int id,
             CancellationToken cancellationToken = default);
+
+        Task<int> GetTotalContactAsync(
+            CancellationToken cancellationToken = default);
     }
 }

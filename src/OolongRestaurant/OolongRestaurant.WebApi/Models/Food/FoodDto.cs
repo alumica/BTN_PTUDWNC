@@ -1,13 +1,8 @@
-﻿using OolongRestaurant.Core.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OolongRestaurant.WebApi.Models.Menu;
 
-namespace OolongRestaurant.Core.Entities
+namespace OolongRestaurant.WebApi.Models.Food
 {
-    public class Food : IEntity
+    public class FoodDto
     {
         public int Id { get; set; }
 
@@ -21,6 +16,6 @@ namespace OolongRestaurant.Core.Entities
 
         public int MenuId { get; set; }
 
-        public Menu Menu { get; set; }
+        public MenuDto Menu { get; set; }
     }
 }

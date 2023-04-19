@@ -82,5 +82,11 @@ namespace OolongRestaurant.Services.Contacts
 
             return rowsCount > 0;
         }
+
+        public async Task<int> GetTotalContactAsync(
+            CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Contact>().CountAsync(cancellationToken);
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Mapster;
 using OolongRestaurant.Core.Entities;
 using OolongRestaurant.WebApi.Models.Contact;
+using OolongRestaurant.WebApi.Models.Food;
+using OolongRestaurant.WebApi.Models.Menu;
 
 namespace OolongRestaurant.WebApi.Mapsters
 {
@@ -43,6 +45,15 @@ namespace OolongRestaurant.WebApi.Mapsters
 
             config.NewConfig<Contact, ContactDto>();
             config.NewConfig<ContactEditModel, Contact>();
+
+            config.NewConfig<Food, FoodDto>();
+            config.NewConfig<FoodEditModel, Food>();
+
+            config.NewConfig<Menu, MenuDto>();
+            config.NewConfig<MenuEditModel, Menu>();
+
+           
+            
 
 
             //// Comment

@@ -3,6 +3,7 @@ using Microsoft.Extensions.FileProviders;
 using NLog.Web;
 using OolongRestaurant.Data.Contexts;
 using OolongRestaurant.Services.Contacts;
+using OolongRestaurant.Services.Foods;
 using OolongRestaurant.Services.Media;
 using OolongRestaurant.Services.Menus;
 using OolongRestaurant.Services.Timing;
@@ -21,8 +22,9 @@ namespace OolongRestaurant.WebApi.Extensions
                     builder.Configuration
                         .GetConnectionString("DefaultConnection")));
 
+            builder.Services.AddScoped<IFoodRepository, FoodRepository>();
             builder.Services.AddScoped<IContactRepository, ContactRepository>();
-            builder.Services.AddScoped<IMenuRespository, MenuRepository>();
+            builder.Services.AddScoped<IMenuRepository, MenuRepository>();
             builder.Services.AddScoped<ITimeProvider, LocalTimeProvider>();
             builder.Services.AddScoped<IMediaManager, LocalFileSystemMediaManager>();
 

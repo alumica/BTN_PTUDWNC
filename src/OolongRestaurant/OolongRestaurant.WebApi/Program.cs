@@ -22,6 +22,8 @@ var app = builder.Build();
 
     // Configure API endpoints
     app.MapContactEndpoints();
+    app.MapMenuEndpoints();
+    app.MapDashboardEndpoints();
 
 
     app.Run();
