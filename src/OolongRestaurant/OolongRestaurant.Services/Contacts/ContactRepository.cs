@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using OolongRestaurant.Core.Contracts;
 using OolongRestaurant.Core.Entities;
 using OolongRestaurant.Data.Contexts;
+using OolongRestaurant.Services.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +30,26 @@ namespace OolongRestaurant.Services.Contacts
             CancellationToken cancellationToken = default)
         {
             return await _context.Set<Contact>().ToListAsync(cancellationToken);
+        }
+        public async Task<IPagedList<Contact>> GetContactsPagedListAsync(
+            IPagingParams pagingParams,
+            CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Contact>()
+                .ToPagedListAsync(pagingParams, cancellationToken);
+        }
+
+        public async Task<IPagedList<Contact>> GetContactsPagedListAsync(
+            int pageNumber = 1,
+            int pageSize = 10,
+            CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Contact>()
+                .ToPagedListAsync(
+                    pageNumber,
+                    pageSize,
+                    nameof(Contact.FullName),
+                    "DESC", cancellationToken);
         }
 
         public async Task<Contact> GetContactByIdAsync(
@@ -59,7 +81,7 @@ namespace OolongRestaurant.Services.Contacts
             if (contact.Id > 0)
             {
                 _context.Contacts.Update(contact);
-                _memoryCache.Remove($"author.by-id.{contact.Id}");
+                _memoryCache.Remove($"contact.by-id.{contact.Id}");
             }
             else
             {

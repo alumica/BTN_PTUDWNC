@@ -31,6 +31,15 @@ namespace OolongRestaurant.Services.Menus
            int id,
            CancellationToken cancellationToken = default);
 
+        Task<IPagedList<Menu>> GetPagedMenuAsync(
+            IPagingParams pagingParams,
+            CancellationToken cancellationToken = default);
+
+        Task<IPagedList<Menu>> GetPagedMenuAsync(
+            int pageNumber = 1,
+            int pageSize = 10,
+            CancellationToken cancellationToken = default);
+
         Task<bool> AddOrUpdateMenuAsync(
             Menu menu,
             CancellationToken cancellationToken = default);

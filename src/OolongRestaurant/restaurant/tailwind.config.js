@@ -4,7 +4,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily:{
-        custom:"Poppins,sans-serif"
+        custom:"Poppins,sans-serif",
+        menus:['"Playfair Display"',],
+        montserrat:['"Montserrat"', 'sans-serif']
       }
     },
   },

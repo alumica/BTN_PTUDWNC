@@ -1,6 +1,6 @@
 ﻿namespace OolongRestaurant.WebApi.Models.Menu
 {
-    public class MenuFilterModel
+    public class MenuFilterModel : PagingModel
     {
     }
 }

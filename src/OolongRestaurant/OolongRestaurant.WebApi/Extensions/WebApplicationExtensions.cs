@@ -2,6 +2,7 @@
 using Microsoft.Extensions.FileProviders;
 using NLog.Web;
 using OolongRestaurant.Data.Contexts;
+using OolongRestaurant.Data.Seeders;
 using OolongRestaurant.Services.Contacts;
 using OolongRestaurant.Services.Foods;
 using OolongRestaurant.Services.Media;
@@ -27,6 +28,8 @@ namespace OolongRestaurant.WebApi.Extensions
             builder.Services.AddScoped<IMenuRepository, MenuRepository>();
             builder.Services.AddScoped<ITimeProvider, LocalTimeProvider>();
             builder.Services.AddScoped<IMediaManager, LocalFileSystemMediaManager>();
+            builder.Services.AddScoped<IDataSeeder, DataSeeder>();
+            builder.Services.AddTransient<RestaurantDbContext>();
 
             return builder;
         }

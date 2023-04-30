@@ -40,7 +40,7 @@ namespace OolongRestaurant.Data.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(
-                typeof(CategoryMap).Assembly);
+                typeof(MenuMap).Assembly);
         }
     }
 }

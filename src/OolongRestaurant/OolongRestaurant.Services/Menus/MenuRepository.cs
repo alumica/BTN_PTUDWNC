@@ -80,7 +80,7 @@ namespace OolongRestaurant.Services.Menus
             if (menu.Id > 0)
             {
                 _context.Menus.Update(menu);
-                _memoryCache.Remove($"author.by-id.{menu.Id}");
+                _memoryCache.Remove($"menu.by-id.{menu.Id}");
             }
             else
             {
@@ -88,6 +88,30 @@ namespace OolongRestaurant.Services.Menus
             }
 
             return await _context.SaveChangesAsync(cancellationToken) > 0;
+        }
+
+        public async Task<IPagedList<Menu>> GetPagedMenuAsync(
+            IPagingParams pagingParams,
+            CancellationToken cancellationToken = default)
+        {
+            IQueryable<Menu> menuQuery = _context.Set<Menu>();
+            return await menuQuery
+                .ToPagedListAsync(
+                pagingParams,
+                cancellationToken);
+        }
+
+        public async Task<IPagedList<Menu>> GetPagedMenuAsync(
+            int pageNumber = 1,
+            int pageSize = 10,
+            CancellationToken cancellationToken = default)
+        {
+            IQueryable<Menu> menuQuery = _context.Set<Menu>();
+            return await menuQuery
+                .ToPagedListAsync(
+                pageNumber, pageSize,
+                nameof(Menu.Name), "DESC",
+                cancellationToken);
         }
 
         public async Task<bool> DeleteMenuByIdAsync(

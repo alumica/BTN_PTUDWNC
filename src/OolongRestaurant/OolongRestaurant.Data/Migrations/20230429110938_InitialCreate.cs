@@ -129,6 +129,7 @@ namespace OolongRestaurant.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Price = table.Column<double>(type: "float", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MenuId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

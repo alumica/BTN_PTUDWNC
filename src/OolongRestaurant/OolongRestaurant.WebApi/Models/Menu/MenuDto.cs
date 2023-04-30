@@ -12,7 +12,5 @@ namespace OolongRestaurant.WebApi.Models.Menu
         public string Description { get; set; }
 
         public string UrlSlug { get; set; }
-
-        public IList<FoodDto> Foods { get; set; }
     }
 }

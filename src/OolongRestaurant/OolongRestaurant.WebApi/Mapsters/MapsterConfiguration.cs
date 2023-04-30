@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using OolongRestaurant.Core.Contracts;
 using OolongRestaurant.Core.Entities;
 using OolongRestaurant.WebApi.Models.Contact;
 using OolongRestaurant.WebApi.Models.Food;
@@ -10,47 +11,17 @@ namespace OolongRestaurant.WebApi.Mapsters
     {
         public void Register(TypeAdapterConfig config)
         {
-            //// Author
-            //config.NewConfig<Author, AuthorDto>();
-            //config.NewConfig<Author, AuthorItem>()
-            //    .Map(dest => dest.PostCount,
-            //        src => src.Posts == null ? 0 : src.Posts.Count);
-
-            //config.NewConfig<AuthorEditModel, Author>();
-
-
-            //// Category
-            //config.NewConfig<Category, CategoryDto>();
-            //config.NewConfig<Category, CategoryItem>()
-            //    .Map(dest => dest.PostCount,
-            //        src => src.Posts == null ? 0 : src.Posts.Count);
-
-            //config.NewConfig<CategoryEditModel, Category>();
-
-            //// Contact
-            //config.NewConfig<Contact, ContactDto>();
-            //config.NewConfig<Contact, ContactItem>();
-
-            //config.NewConfig<ContactEditModel, Category>();
-
-
-            //// Tag
-            //config.NewConfig<Tag, TagDto>();
-            //config.NewConfig<Tag, TagItem>()
-            //    .Map(dest => dest.PostCount,
-            //        src => src.Posts == null ? 0 : src.Posts.Count);
-
-            //config.NewConfig<TagEditModel, Tag>();
-
+            config.NewConfig<Menu, MenuDto>();
+            config.NewConfig<MenuEditModel, Menu>();
 
             config.NewConfig<Contact, ContactDto>();
             config.NewConfig<ContactEditModel, Contact>();
 
             config.NewConfig<Food, FoodDto>();
+            config.NewConfig<IList<Food>, IList<FoodDto>>();
             config.NewConfig<FoodEditModel, Food>();
 
-            config.NewConfig<Menu, MenuDto>();
-            config.NewConfig<MenuEditModel, Menu>();
+            
 
            
             

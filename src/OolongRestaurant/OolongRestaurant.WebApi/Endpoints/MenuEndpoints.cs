@@ -10,6 +10,8 @@ using OolongRestaurant.WebApi.Models.Menu;
 using System.Net;
 using OolongRestaurant.WebApi.Models.Food;
 using OolongRestaurant.Core.Contracts;
+using OolongRestaurant.Services.Foods;
+using Mapster;
 
 namespace OolongRestaurant.WebApi.Endpoints
 {
@@ -22,7 +24,7 @@ namespace OolongRestaurant.WebApi.Endpoints
 
             routeGroupBuilder.MapGet("/", GetMenus)
                 .WithName("GetMenus")
-                .Produces<ApiResponse<IList<Menu>>>();
+                .Produces<ApiResponse<PaginationResult<Menu>>>();
 
             routeGroupBuilder.MapGet("/{id:int}", GetMenuDetails)
                 .WithName("GetMenuById")
@@ -57,9 +59,10 @@ namespace OolongRestaurant.WebApi.Endpoints
             [AsParameters] MenuFilterModel model,
             IMenuRepository menuRespository)
         {
-            var menuList = await menuRespository.GetMenusAsync();
+            var menuList = await menuRespository.GetPagedMenuAsync();
+            var paginationResult = new PaginationResult<Menu>(menuList);
 
-            return Results.Ok(ApiResponse.Success(menuList));
+            return Results.Ok(ApiResponse.Success(paginationResult));
         }
 
         private static async Task<IResult> GetMenuDetails(
@@ -76,13 +79,17 @@ namespace OolongRestaurant.WebApi.Endpoints
 
         private static async Task<IResult> GetFoodsByMenuSlug(
             string slug,
-            IMenuRepository menuRepository,
+            [AsParameters] PagingModel pagingModel,
+            IFoodRepository foodRepository,
             IMapper mapper)
         {
-            var foodsList = await menuRepository.GetPagedFoodAsync();
-            var list = mapper.Map<IPagedList<FoodDto>>(foodsList);
 
-            var paginationResult = new PaginationResult<FoodDto>(list);
+            var foodsList = await foodRepository.GetPagedFoodAsync(
+                slug,
+                pagingModel,
+                posts => posts.ProjectToType<FoodDto>());
+
+            var paginationResult = new PaginationResult<FoodDto>(foodsList);
 
             return Results.Ok(ApiResponse.Success(paginationResult));
         }

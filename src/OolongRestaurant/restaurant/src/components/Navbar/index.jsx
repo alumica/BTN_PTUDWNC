@@ -10,6 +10,7 @@ function Navbar() {
       <Link to={'/'} className={linkStyle}>Home</Link>
       <Link to={'/about'} className={linkStyle}>About</Link>
       <Link to={'/products'} className={linkStyle}>Product</Link>
+      <Link to={'/menus'} className={linkStyle}>Menu</Link>
       <Link to={'/contact'} className={linkStyle}>Contact</Link>
       </div>
       <div className="text-mg hidden font-bold lg:block mr-2">

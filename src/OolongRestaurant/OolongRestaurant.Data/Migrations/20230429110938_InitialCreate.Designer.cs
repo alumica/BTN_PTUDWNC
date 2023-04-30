@@ -12,7 +12,7 @@ using OolongRestaurant.Data.Contexts;
 namespace OolongRestaurant.Data.Migrations
 {
     [DbContext(typeof(RestaurantDbContext))]
-    [Migration("20230417153613_InitialCreate")]
+    [Migration("20230429110938_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -98,6 +98,9 @@ namespace OolongRestaurant.Data.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MenuId")
                         .HasColumnType("int");

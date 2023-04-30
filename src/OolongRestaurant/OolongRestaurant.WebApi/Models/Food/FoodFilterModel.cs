@@ -1,6 +1,10 @@
-﻿namespace OolongRestaurant.WebApi.Models.Food
+﻿using System.ComponentModel;
+
+namespace OolongRestaurant.WebApi.Models.Food
 {
-    public class FoodFilterModel
+    public class FoodFilterModel : PagingModel
     {
+        [DefaultValue(false)]
+        public bool? IsPaged { get; set; }
     }
 }

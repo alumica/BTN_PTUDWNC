@@ -20,7 +20,7 @@ namespace OolongRestaurant.WebApi.Endpoints
 
             routeGroupBuilder.MapGet("/", GetContacts)
                 .WithName("GetContacts")
-                .Produces<ApiResponse<IList<Contact>>>();
+                .Produces<ApiResponse<PaginationResult<Contact>>>();
 
             routeGroupBuilder.MapGet("/{id:int}", GetContactDetails)
                 .WithName("GetContactById")
@@ -49,9 +49,10 @@ namespace OolongRestaurant.WebApi.Endpoints
             [AsParameters] ContactFilterModel model,
             IContactRepository contactRepository)
         {
-            var contactList = await contactRepository.GetContactsAsync();
+            var contactList = await contactRepository.GetContactsPagedListAsync();
+            var paginationResult = new PaginationResult<Contact>(contactList);
 
-            return Results.Ok(ApiResponse.Success(contactList));
+            return Results.Ok(ApiResponse.Success(paginationResult));
         }
 
         private static async Task<IResult> GetContactDetails(
