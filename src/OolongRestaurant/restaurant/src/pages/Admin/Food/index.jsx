@@ -4,10 +4,12 @@ import { getContacts, deleteContact } from "../../../services/ContactRepository"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { getFoods, deleteFoodById } from "../../../services/FoodRepository";
+import Loading from "../../../components/Others/loading";
 
 
 const Foods = () => {
-    const [foodsList, setFoodsList] = useState([]);
+    const [foodsList, setFoodsList] = useState([]),
+        [isVisibleLoading, setIsVisibleLoading] = useState(true);
     let { id } = useParams(),
         p = 1, ps = 10;
 
@@ -18,6 +20,7 @@ const Foods = () => {
                 setFoodsList(data.items);
             else
                 setFoodsList([]);
+                setIsVisibleLoading(false);
         });
     }, [
         p, ps]);
@@ -29,6 +32,7 @@ const Foods = () => {
             <div className="mb-5">
                 <Link to="/admin/foods/edit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Thêm mới</Link>
             </div>
+            {isVisibleLoading ? <Loading/> :
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 border-collapse border-black">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -74,7 +78,7 @@ const Foods = () => {
                                 </tr>
                         }
                     </tbody>
-                </table>
+                </table> }
         </div>
     ) 
 }

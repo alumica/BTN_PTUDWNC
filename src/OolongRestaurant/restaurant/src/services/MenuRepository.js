@@ -1,4 +1,4 @@
-import { get_api } from "./Method";
+import { get_api, post_api, delete_api } from "./Method";
 import { isEmptyOrSpaces } from "../utils/utils";
 import { getFoods } from "./FoodRepository";
 
@@ -13,6 +13,16 @@ export function getMenus(pageSize = 10, pageNumber = 1, sortColumn = '', sortOrd
     return get_api(url.href);
 }
 
+export async function getMenuById(id = 0) {
+    if (id > 0)
+        return get_api(api + `/${id}`);
+    return null;
+}
+
+export async function addOrUpdateMenu(formData) {
+    return post_api(api, formData);
+}
+
 export async function getFoodsByMenuSlug(slug = '', pageSize = 10, pageNumber = 1, sortColumn = '', sortOrder = '') {
     if (!isEmptyOrSpaces(slug)) {
         let url = new URL(api + `/${slug}/foods`);
@@ -25,5 +35,11 @@ export async function getFoodsByMenuSlug(slug = '', pageSize = 10, pageNumber = 
     else
         return getFoods(3, 1);
         
+    return null;
+}
+
+export async function deleteMenuById(id = 0) {
+    if (id > 0)
+        return delete_api(api + `/${id}`);
     return null;
 }

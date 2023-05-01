@@ -6,7 +6,7 @@ const FoodList = ({list}) => {
                     <img src={images.leftArrow}></img>
                 </div>
 
-                <div className='flex flex-row justify-center items-end gap-[83px]'>
+                <div className='flex flex-row justify-center items-end gap-[83px] overflow-x-auto max-w-[1086px]'>
                     {list?.length > 0 && list.map((item, index) =>
                     <div className='w-[300px] h-[375px] bg-white/20 border rounded-[30px] border-solid border-white' key={index}>
                         <div className='flex flex-row justify-center items-center rounded-[30px] w-[300px] h-[225px]'><img src={item.imageUrl} className='flex flex-row justify-center items-center w-[70%] h-[70%] ' /></div>

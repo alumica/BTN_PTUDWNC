@@ -5,8 +5,12 @@ module.exports = {
     extend: {
       fontFamily:{
         custom:"Poppins,sans-serif",
-        menus:['"Playfair Display"',],
+        playfair:['"Playfair Display"',],
         montserrat:['"Montserrat"', 'sans-serif']
+      },
+      colors: {
+        'primary-red': '#B1464A',
+        'primary-black': '#222222'
       }
     },
   },

@@ -3,10 +3,12 @@ using MapsterMapper;
 using OolongRestaurant.Core.Collections;
 using OolongRestaurant.Core.Entities;
 using OolongRestaurant.Services.Contacts;
+using OolongRestaurant.Services.Foods;
 using OolongRestaurant.Services.Media;
 using OolongRestaurant.WebApi.Filters;
 using OolongRestaurant.WebApi.Models;
 using OolongRestaurant.WebApi.Models.Contact;
+using OolongRestaurant.WebApi.Models.Food;
 using System.Net;
 
 namespace OolongRestaurant.WebApi.Endpoints
@@ -28,7 +30,7 @@ namespace OolongRestaurant.WebApi.Endpoints
 
             routeGroupBuilder.MapPost("/", AddContact)
                 .WithName("AddNewContact")
-                .AddEndpointFilter<ValidatorFilter<ContactEditModel>>()
+                .Accepts<ContactEditModel>("multipart/form-data")
                 .Produces(401)
                 .Produces<ApiResponse<Contact>>();
 
@@ -69,12 +71,24 @@ namespace OolongRestaurant.WebApi.Endpoints
 
 
         private static async Task<IResult> AddContact(
-            ContactEditModel model,
+            HttpContext context,
             IContactRepository contactRepository,
             IMapper mapper)
         {
+            var model = await ContactEditModel.BindAsync(context);
 
-            var contact = mapper.Map<Contact>(model);
+            var contact = model.Id > 0 ? await contactRepository.GetContactByIdAsync(model.Id) : null;
+
+            if (contact == null)
+            {
+                contact = new Contact();
+            }
+
+            contact.FullName = model.FullName;
+            contact.Email = model.Email;
+            contact.Subject = model.Subject;
+            contact.Description = model.Description;
+
             await contactRepository.AddOrUpdateContactAsync(contact);
 
             return Results.Ok(ApiResponse.Success(

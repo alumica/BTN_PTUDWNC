@@ -114,6 +114,23 @@ namespace OolongRestaurant.Services.Menus
                 cancellationToken);
         }
 
+        public async Task<IPagedList<T>> GetPagedMenuAsync<T>(
+            IPagingParams pagingParams,
+            Func<IQueryable<Menu>, IQueryable<T>> mapper,
+            string name = null,
+            CancellationToken cancellationToken = default)
+        {
+            var menuQuery = _context.Set<Menu>().AsNoTracking();
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                menuQuery = menuQuery.Where(x => x.Name.Contains(name));
+            }
+
+            return await mapper(menuQuery)
+                .ToPagedListAsync(pagingParams, cancellationToken);
+        }
+
         public async Task<bool> DeleteMenuByIdAsync(
             int id,
             CancellationToken cancellationToken = default)

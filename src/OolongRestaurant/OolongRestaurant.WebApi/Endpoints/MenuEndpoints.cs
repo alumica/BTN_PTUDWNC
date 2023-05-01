@@ -12,6 +12,7 @@ using OolongRestaurant.WebApi.Models.Food;
 using OolongRestaurant.Core.Contracts;
 using OolongRestaurant.Services.Foods;
 using Mapster;
+using OolongRestaurant.Services.Extensions;
 
 namespace OolongRestaurant.WebApi.Endpoints
 {
@@ -24,7 +25,7 @@ namespace OolongRestaurant.WebApi.Endpoints
 
             routeGroupBuilder.MapGet("/", GetMenus)
                 .WithName("GetMenus")
-                .Produces<ApiResponse<PaginationResult<Menu>>>();
+                .Produces<ApiResponse<PaginationResult<MenuDto>>>();
 
             routeGroupBuilder.MapGet("/{id:int}", GetMenuDetails)
                 .WithName("GetMenuById")
@@ -38,7 +39,7 @@ namespace OolongRestaurant.WebApi.Endpoints
 
             routeGroupBuilder.MapPost("/", AddMenu)
                 .WithName("AddNewMenu")
-                .AddEndpointFilter<ValidatorFilter<MenuEditModel>>()
+                .Accepts<MenuEditModel>("multipart/form-data")
                 .Produces(401)
                 .Produces<ApiResponse<Menu>>();
 
@@ -59,8 +60,10 @@ namespace OolongRestaurant.WebApi.Endpoints
             [AsParameters] MenuFilterModel model,
             IMenuRepository menuRespository)
         {
-            var menuList = await menuRespository.GetPagedMenuAsync();
-            var paginationResult = new PaginationResult<Menu>(menuList);
+            var menuList = await menuRespository
+                .GetPagedMenuAsync(
+                    model, menus => menus.ProjectToType<MenuDto>());
+            var paginationResult = new PaginationResult<MenuDto>(menuList);
 
             return Results.Ok(ApiResponse.Success(paginationResult));
         }
@@ -95,23 +98,33 @@ namespace OolongRestaurant.WebApi.Endpoints
         }
 
         private static async Task<IResult> AddMenu(
-            MenuEditModel model,
+            HttpContext context,
             IMenuRepository menuRepository,
             IMapper mapper)
         {
-
-            if(await menuRepository
-                .IsMenuSlugExistedAsync(0, model.UrlSlug))
+            var model = await MenuEditModel.BindAsync(context);
+            var slug = model.Name.GenerateSlug();
+            if (await menuRepository
+                .IsMenuSlugExistedAsync(model.Id, slug))
             {
                 return Results.Conflict(
-                    $"Slug '{model.UrlSlug}' đã được sử dụng");
+                    $"Slug '{slug}' đã được sử dụng");
+            }
+            var menu = model.Id > 0 ? await menuRepository.GetMenuByIdAsync(model.Id) : null;
+
+            if (menu == null)
+            {
+                menu = new Menu();
             }
 
-            var menu = mapper.Map<Menu>(model);
+            menu.Name = model.Name;
+            menu.Description = model.Description;
+            menu.UrlSlug = model.UrlSlug;
+
             await menuRepository.AddOrUpdateMenuAsync(menu);
 
             return Results.Ok(ApiResponse.Success(
-                mapper.Map<MenuDto>(menu), HttpStatusCode.Created));
+                mapper.Map<Menu>(menu), HttpStatusCode.Created));
         }
 
         private static async Task<IResult> UpdateMenu(

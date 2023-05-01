@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getContacts, deleteContact } from "../../../services/ContactRepository";
+import { getContacts, deleteContactById } from "../../../services/ContactRepository";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import ContactFilterPane from "./ContactFilterPane";
+import Loading from "../../../components/Others/loading";
 
 
 const Contacts = () => {
-    const [contactsList, setContactsList] = useState([]);
+    const [contactsList, setContactsList] = useState([]),
+        [isVisibleLoading, setIsVisibleLoading] = useState(true);
     let { id } = useParams(),
         p = 1, ps = 10;
 
@@ -18,6 +20,7 @@ const Contacts = () => {
                 setContactsList(data.items);
             else
                 setContactsList([]);
+            setIsVisibleLoading(false)
         });
     }, [
         p, ps]);
@@ -29,6 +32,7 @@ const Contacts = () => {
             <div className="mb-5">
                 <Link to="/admin/contacts/edit" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Thêm mới</Link>
             </div>
+            {isVisibleLoading ? <Loading/> :
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 border-collapse border-black">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
@@ -55,9 +59,12 @@ const Contacts = () => {
                                     <button>2</button> }</td> */}
                                 <td className="px-6 py-4">
                                     <button onClick={(() => {
-                                        var c = confirm('Bạn có muốn xóa liên hệ này không ?')
-                                            ? deleteContact(item.id) 
-                                            : console.log("Hủy");})}
+                                        if (confirm('Bạn có muốn xóa người liên hệ này không ?'))
+                                        {
+                                            deleteContactById(item.id); location.reload();
+                                        }
+                                        else
+                                            console.log("Hủy");})}
                                         className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                                             <FontAwesomeIcon icon={faTimes}></FontAwesomeIcon>
                                     </button>
@@ -71,7 +78,7 @@ const Contacts = () => {
                                 </tr>
                         }
                     </tbody>
-                </table>
+                </table>}
         </div>
     ) 
 }

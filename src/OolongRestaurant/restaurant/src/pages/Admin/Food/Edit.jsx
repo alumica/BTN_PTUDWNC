@@ -5,12 +5,12 @@ import { getMenus } from "../../../services/MenuRepository";
 import { isInteger, decode, isEmptyOrSpaces } from "../../../utils/utils";
 
 
-const Edit = () => {
+const EditFood = () => {
     const [validated, setValidated] = useState(false);
 
     const initialState = {
         id: 0,
-        food: '',
+        name: '',
         description: '',
         imageUrl: '',
         menu: {}
@@ -48,8 +48,10 @@ const Edit = () => {
         } else {
             let form = new FormData(e.target);
             addOrUpdateFood(form).then(data => {
-                if (data)
+                if (data) {
                     alert('Đã lưu thành công!');
+                    window.location = '/admin/foods';
+                }
                 else
                     alert('Đã xảy ra lỗi');
             });
@@ -75,7 +77,7 @@ const Edit = () => {
                         <input name="name" title="Name" type="text" value={food.name || ''}
                             onChange={e => setFood({...food, name: e.target.value
                                 })}
-                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" />
+                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" required />
                     </div>
                 </div>
                 <div className="md:flex md:items-center mb-6">
@@ -88,7 +90,7 @@ const Edit = () => {
                         <textarea name="description" title="Description" value={decode(food.description || '')}
                             onChange={e => setFood({...food, description: e.target.value
                                 })}
-                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" id="inline-password" type="text" />
+                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" id="inline-password" type="text" required />
                     </div>
                 </div>
                 <div className="md:flex md:items-center mb-6">
@@ -101,7 +103,7 @@ const Edit = () => {
                         <input name="price" title="Price" value={food.price || ''}
                             onChange={e => setFood({...food, price: e.target.value
                                 })}
-                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" id="inline-password" type="number"/>
+                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" id="inline-password" type="number" required/>
                     </div>
                 </div>
                 <div className="md:flex md:items-center mb-6">
@@ -127,13 +129,6 @@ const Edit = () => {
                         </select>
                     </div>
                 </div>
-                {/* {!isEmptyOrSpaces(food.imageUrl) && <div className='row mb-3'>
-                        <Form.Label className='col-sm-2 col-form-label'>Hình hiện tại</Form.Label>
-                        <div className='col-sm-10'>
-                            <img src={food.imageUrl} alt={food.title}/>
-                        </div>
-                        </div>
-                } */}
 
                 {!isEmptyOrSpaces(food.imageUrl) && <div className="md:flex md:items-center mb-6">
                     <div className="md:w-1/3">
@@ -181,4 +176,4 @@ const Edit = () => {
     );
 }
 
-export default Edit;
+export default EditFood;
