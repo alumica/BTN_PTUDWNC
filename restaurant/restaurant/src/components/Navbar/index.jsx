@@ -9,6 +9,7 @@ function Navbar() {
       <div className="flex font-semibold">
       <Link to={'/'} className={linkStyle}>Home</Link>
       <Link to={'/about'} className={linkStyle}>About</Link>
+      <Link to={'/albumfood'} className={linkStyle}>Albumfood</Link>
       <Link to={'/products'} className={linkStyle}>Product</Link>
       <Link to={'/contact'} className={linkStyle}>Contact</Link>
       </div>
