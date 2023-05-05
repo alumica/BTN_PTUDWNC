@@ -57,9 +57,9 @@ const Menus = () => {
                                     <button>2</button> }</td> */}
                                 <td className="px-6 py-4">
                                     <button onClick={(() => {
-                                        if (confirm('Bạn có muốn xóa thực đơn này không ?'))
+                                        if (window.confirm('Bạn có muốn xóa thực đơn này không ?'))
                                         {
-                                            deleteMenuById(item.id); location.reload();
+                                            deleteMenuById(item.id); window.location.reload();
                                         }
                                         else
                                             console.log("Hủy");})}

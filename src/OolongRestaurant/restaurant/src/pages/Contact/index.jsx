@@ -21,7 +21,7 @@ function Contact() {
         addOrUpdateContact(form).then(data => {
             if (data) {
               alert('Thanks!');
-              location.reload();
+              window.location.reload();
             }
             else
                 alert('Đã xảy ra lỗi');

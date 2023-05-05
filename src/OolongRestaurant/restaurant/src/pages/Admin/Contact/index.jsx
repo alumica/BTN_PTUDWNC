@@ -59,9 +59,9 @@ const Contacts = () => {
                                     <button>2</button> }</td> */}
                                 <td className="px-6 py-4">
                                     <button onClick={(() => {
-                                        if (confirm('Bạn có muốn xóa người liên hệ này không ?'))
+                                        if (window.confirm('Bạn có muốn xóa người liên hệ này không ?'))
                                         {
-                                            deleteContactById(item.id); location.reload();
+                                            deleteContactById(item.id); window.location.reload();
                                         }
                                         else
                                             console.log("Hủy");})}

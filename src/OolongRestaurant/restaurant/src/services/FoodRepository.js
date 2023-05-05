@@ -1,4 +1,3 @@
-import { isEmptyOrSpaces } from "../utils/utils";
 import { delete_api, get_api, post_api } from "./Method";
 
 const api = 'https://localhost:7116/api/foods';

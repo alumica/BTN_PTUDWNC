@@ -4,9 +4,6 @@ import Contact from "../pages/Contact";
 import About from "../pages/About";
 import Signup from "../pages/Signup";
 import Login from "../pages/Login";
-import AdminLayout from "../pages/Admin/Layout";
-import * as AdminIndex from "../pages/Admin";
-import Menu from "../pages/Menu/menu";
 
 const publicRoutes= [
     {path: "/", component: <Home/> },
