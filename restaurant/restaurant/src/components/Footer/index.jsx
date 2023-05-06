@@ -10,25 +10,27 @@ function Footer(){
                     <img src={images.icon} alt="" className="object-contain" />
                     <div className="flex-col font-montserrat text-primary-white">
                         <div className="font-bold mb-4">TERM</div>
-                        <div>
+                        <div className="mb-5">
                             <Link to={""}>Privacy Policy</Link>
                         </div>
-                        <div>
+                        <div className="mb-5">
                             <Link to={""}>Terms & Conditions</Link>
                         </div>
                     </div>
 
                     <div className="flex-col font-montserrat text-primary-white">
-                        <div className="font-bold">Contact</div>
+                        <div className="font-bold mb-4">CONTACT</div>
                         <div>
-                        <i class="fa-sharp fa-solid fa-phone fa-xl" style={{color: "#FFFFFF"}}></i>
-                         :0123456789
+                            <i class="fa-sharp fa-solid fa-phone fa-lg mr-2 mb-5" style={{color: "#FFFFFF"}}></i>
+                         : 0123456789
                         </div>
                         <div>
-                            <Link to={""}>tuananhkietson@gmail.com</Link>
+                            <i class="fa-solid fa-envelope fa-lg mr-2 mb-5" style={{color: "#FFFFFF"}}></i>
+                            : sushirestaurant@gmail.com
                         </div>
                         <div>
-                            Address: DaLat,LamDong
+                            <i class="fa-solid fa-location-dot fa-lg mr-2 mb-5" style={{color: "FFFFFF"}}></i>
+                            : Dalat,LamDong
                         </div>
                     </div>
                     <div className="flex flex-col">
