@@ -14,7 +14,7 @@ const MenuList = () => {
     //     urlSlug = type.urlSlug;
     const [menuList, setMenuList] = useState([]), 
         [foodList, setFoodList] = useState([]);
-    const [slug, setSlug] = useState("");
+    const [slug, setSlug] = useState('');
 
     useEffect(() => {
         getMenus(100, 1).then(data => {
@@ -22,9 +22,11 @@ const MenuList = () => {
                 setMenuList(data.items);
             else
                 setMenuList([]);
-        });
-        
-        getFoodsByMenuSlug(slug, 3, 1).then(data => {
+        });   
+    }, []);
+
+    useEffect(() => {
+        getFoodsByMenuSlug(slug, 100, 1).then(data => {
             if (data)
                 setFoodList(data.items);
             else
