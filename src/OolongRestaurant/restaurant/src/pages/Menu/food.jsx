@@ -1,12 +1,23 @@
 import images from '../../assets/img';
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+
 const FoodList = ({list}) => {
+        const settings = {
+          dots: true,
+          infinite: true,
+          speed: 500,
+          slidesToShow: 3,
+          slidesToScroll: 1
+        };
     return (
         <div className="flex flex-row justify-center items-center gap-[33px] pt-20 ">
-                <div className="flex flex-row justify-center items-center w-[80px] h-[80px] bg-white/20 backdrop-blur-[20px] rounded-[50px]">
+                {/* <div className="flex flex-row justify-center items-center w-[80px] h-[80px] bg-white/20 backdrop-blur-[20px] rounded-[50px]">
                     <img src={images.leftArrow}></img>
-                </div>
-
-                <div className='flex flex-row justify-center items-end gap-[83px] overflow-x-auto max-w-[1086px]'>
+                </div> */}
+                {/* flex flex-row justify-center items-end */}
+                <div className='flex flex-row justify-center items-end gap-[83px] max-w-[1086px]'>
                     {list?.length > 0 && list.map((item, index) =>
                     <div className='w-[300px] h-[375px] bg-white/20 border rounded-[30px] border-solid border-white' key={index}>
                         <div className='flex flex-row justify-center items-center rounded-[30px] w-[300px] h-[225px]'><img src={item.imageUrl} className='flex flex-row justify-center items-center w-[70%] h-[70%] ' /></div>
@@ -22,6 +33,8 @@ const FoodList = ({list}) => {
                         </div>
                     </div>
                     )}
+
+                     
 
 
 
@@ -69,10 +82,11 @@ const FoodList = ({list}) => {
                     </div> */}
                 </div>
 
-                <div className="flex flex-row justify-center items-center w-[80px] h-[80px] bg-white/20 backdrop-blur-[20px] rounded-[50px] -rotate-180">
+                {/* <div className="flex flex-row justify-center items-center w-[80px] h-[80px] bg-white/20 backdrop-blur-[20px] rounded-[50px] -rotate-180">
                     <img src={images.leftArrow}></img>
-                </div>
+                </div> */}
             </div>
+        
     );
 }
 

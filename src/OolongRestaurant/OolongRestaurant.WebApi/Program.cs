@@ -25,6 +25,7 @@ var app = builder.Build();
     app.MapMenuEndpoints();
     app.MapDashboardEndpoints();
     app.MapFoodEndpoints();
+    app.MapUserEndpoints();
 
 
     app.Run();

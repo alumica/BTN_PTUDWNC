@@ -11,6 +11,9 @@ namespace OolongRestaurant.WebApi.Mapsters
     {
         public void Register(TypeAdapterConfig config)
         {
+            config.NewConfig<Menu, MenuDto>();
+            config.NewConfig<MenuEditModel, Menu>();
+
             config.NewConfig<Menu, MenuDto>()
                 .Map(dest => dest.FoodCount,
                     src => src.Foods == null ? 0 : src.Foods.Count);

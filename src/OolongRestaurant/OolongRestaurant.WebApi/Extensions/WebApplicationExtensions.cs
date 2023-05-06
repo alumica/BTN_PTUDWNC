@@ -8,6 +8,7 @@ using OolongRestaurant.Services.Foods;
 using OolongRestaurant.Services.Media;
 using OolongRestaurant.Services.Menus;
 using OolongRestaurant.Services.Timing;
+using OolongRestaurant.Services.Users;
 
 namespace OolongRestaurant.WebApi.Extensions
 {
@@ -23,6 +24,7 @@ namespace OolongRestaurant.WebApi.Extensions
                     builder.Configuration
                         .GetConnectionString("DefaultConnection")));
 
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IFoodRepository, FoodRepository>();
             builder.Services.AddScoped<IContactRepository, ContactRepository>();
             builder.Services.AddScoped<IMenuRepository, MenuRepository>();

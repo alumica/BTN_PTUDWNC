@@ -62,5 +62,8 @@ namespace OolongRestaurant.Services.Menus
             int pageNumber = 1,
             int pageSize = 10,
             CancellationToken cancellationToken = default);
+
+        Task<int> GetTotalMenuAsync(
+            CancellationToken cancellationToken = default);
     }
 }

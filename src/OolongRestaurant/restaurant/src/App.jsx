@@ -1,5 +1,5 @@
-import React from 'react'
-import {BrowserRouter as Router, Routes,Route} from 'react-router-dom'
+import React from 'react';
+import {BrowserRouter as Router, Routes,Route} from 'react-router-dom';
 import { publicRoutes } from './routes';
 import AdminLayout from './pages/Admin/Layout';
 import * as AdminIndex from './pages/Admin/index';
@@ -13,6 +13,7 @@ import Foods from './pages/Admin/Food';
 import EditFood from './pages/Admin/Food/edit';
 import Menu from './pages/Menu';
 import * as MenuIndex from './pages/Menu/menu';
+import EditUser from './pages/Admin/User/edit';
 
 function App() {
   return (
@@ -46,6 +47,8 @@ function App() {
               <Route path='/admin/contacts/edit' element={<EditContact/>}/>
               <Route path='/admin/contacts/edit/:id' element={<EditContact/>}/>
               <Route path='/admin/users' element={<Users/>}/>
+              <Route path='/admin/users/edit' element={<EditUser/>}/>
+              <Route path='/admin/users/edit/:id' element={<EditUser/>}/>
             </Route>
           </Routes>
         </div>

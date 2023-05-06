@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import { getContacts, deleteContactById } from "../../../services/ContactRepository";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import ContactFilterPane from "./ContactFilterPane";
 import Loading from "../../../components/Others/loading";
 
 

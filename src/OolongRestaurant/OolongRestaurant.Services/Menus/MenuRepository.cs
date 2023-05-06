@@ -168,5 +168,11 @@ namespace OolongRestaurant.Services.Menus
                 nameof(Food.Name), "DESC",
                 cancellationToken);
         }
+
+        public async Task<int> GetTotalMenuAsync(
+            CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Menu>().CountAsync(cancellationToken);
+        }
     }
 }

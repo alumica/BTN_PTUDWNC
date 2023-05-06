@@ -56,22 +56,6 @@ const MenuList = () => {
                     </div>
                 )}
 
-                {/* <div className={type.urlSlug == "sushi" ? selected : normal}>
-                    <Link to={`/menus/${type.urlSlug}`} className="px-[30px] py-[15px] font-normal text-base leading-[130%]">Sushi</Link>
-                </div>
-                <div className=" bg-white/10 text-white flex flex-row justify-center items-center rounded-[30px] border backdrop-blur-[20px] border-solid border-white">
-                    <Link to={`/menus/`} className="px-[30px] py-[15px] font-normal text-base leading-[130%]">Ramen</Link>
-                </div>
-                <div className=" bg-white/10 text-white flex flex-row justify-center items-center rounded-[30px] border backdrop-blur-[20px] border-solid border-white">
-                    <Link to={``} className="px-[30px] py-[15px] font-normal text-base leading-[130%]">Udon</Link>
-                </div>
-                <div className=" bg-white/10 text-white flex flex-row justify-center items-center rounded-[30px] border backdrop-blur-[20px] border-solid border-white">
-                    <Link to={``} className="px-[30px] py-[15px] font-normal text-base leading-[130%]">Danggo</Link>
-                </div>
-                <div className=" bg-white/10 text-white flex flex-row justify-center items-center rounded-[30px] border backdrop-blur-[20px] border-solid border-white">
-                    <Link to={``} className="px-[30px] py-[15px] font-normal text-base leading-[130%]">Other</Link>
-                </div> */}
-
                 
             </div>
             {/* Food */}

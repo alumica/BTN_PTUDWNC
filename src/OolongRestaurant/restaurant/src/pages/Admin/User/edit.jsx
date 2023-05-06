@@ -3,42 +3,37 @@ import { Link, useParams } from "react-router-dom";
 import { addOrUpdateFood, getFoodById } from "../../../services/FoodRepository";
 import { getMenus } from "../../../services/MenuRepository";
 import { isInteger, decode, isEmptyOrSpaces } from "../../../utils/utils";
+import { getUserById, addOrUpdateUser } from "../../../services/UserRepository";
 
 
-const EditFood = () => {
+const EditUser = () => {
     const [validated, setValidated] = useState(false);
 
     const initialState = {
         id: 0,
-        name: '',
-        description: '',
+        fullName: '',
+        email: '',
+        userName: '',
+        password: '',
         imageUrl: '',
         menu: {}
     },
-        [food, setFood] = useState(initialState),
-        [menuList, setMenuList] = useState([]);
+        [user, setUser] = useState(initialState);
     
         
     let { id } = useParams();
     id = id ?? 0;
 
     useEffect(() => {
-        document.title = 'Thêm/cập nhật món ăn';
+        document.title = 'Thêm/cập nhật người dùng';
 
-        getFoodById(id).then(data => {
+        getUserById(id).then(data => {
             if (data)
-                setFood({...data,});
+                setUser({...data,});
             else
-                setFood(initialState);
+                setUser(initialState);
         });
-
-        getMenus().then(data => {
-            if (data)
-                setMenuList(data.items);
-            else
-                setMenuList([]);
-        });
-    }, []);
+    }, [id]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -47,10 +42,10 @@ const EditFood = () => {
             setValidated(true);
         } else {
             let form = new FormData(e.target);
-            addOrUpdateFood(form).then(data => {
+            addOrUpdateUser(form).then(data => {
                 if (data) {
                     alert('Đã lưu thành công!');
-                    window.location = '/admin/foods';
+                    window.location = '/admin/users';
                 }
                 else
                     alert('Đã xảy ra lỗi');
@@ -66,78 +61,91 @@ const EditFood = () => {
                 method='post'
                 encType='multipart/form-data'
                 onSubmit={handleSubmit}>
-                <input type="hidden" name="id" value={food.id}/>
+                <input type="hidden" name="id" value={user.id}/>
                 <div className="md:flex md:items-center mb-6">
                     <div className="md:w-1/3">
                         <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-full-name">
-                            Tên món ăn
+                            Họ và tên
                         </label>
                     </div>
                     <div className="md:w-2/3">
-                        <input name="name" title="Name" type="text" value={food.name || ''}
-                            onChange={e => setFood({...food, name: e.target.value
+                        <input name="fullName" title="Full Name" type="text" value={user.fullName || ''}
+                            onChange={e => setUser({...user, fullName: e.target.value
                                 })}
                             className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" required />
                     </div>
                 </div>
                 <div className="md:flex md:items-center mb-6">
                     <div className="md:w-1/3">
-                        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-password">
-                            Mô tả
+                        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-full-name">
+                            Email
                         </label>
                     </div>
                     <div className="md:w-2/3">
-                        <textarea name="description" title="Description" value={decode(food.description || '')}
-                            onChange={e => setFood({...food, description: e.target.value
+                        <input name="email" title="Email" type="email" value={user.email || ''}
+                            onChange={e => setUser({...user, email: e.target.value
                                 })}
-                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" id="inline-password" type="text" required />
+                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" required />
                     </div>
                 </div>
                 <div className="md:flex md:items-center mb-6">
                     <div className="md:w-1/3">
-                        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-password">
-                            Giá
+                        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-full-name">
+                            Tên người dùng
                         </label>
                     </div>
                     <div className="md:w-2/3">
-                        <input name="price" title="Price" value={food.price || ''}
-                            onChange={e => setFood({...food, price: e.target.value
+                        <input name="userName" title="User Name" type="text" value={user.userName || ''}
+                            onChange={e => setUser({...user, userName: e.target.value
                                 })}
-                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" id="inline-password" type="number" required/>
+                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" required />
                     </div>
                 </div>
                 <div className="md:flex md:items-center mb-6">
                     <div className="md:w-1/3">
+                        <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-full-name">
+                            Mật khẩu
+                        </label>
+                    </div>
+                    <div className="md:w-2/3">
+                        <input name="password" title="Password" type="text" value={user.password || ''}
+                            onChange={e => setUser({...user, password: e.target.value
+                                })}
+                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" required />
+                    </div>
+                </div>
+                
+                <div className="md:flex md:items-center mb-6">
+                    <div className="md:w-1/3">
                         <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-password">
-                            Thực đơn
+                            Loại
                         </label>
                     </div>
                     <div className="md:w-2/3">
                         <select className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"
-                                name='menuId'
-                                title='Menu Id'
-                                value={food.menu?.id}
+                                name='typeUser'
+                                title='Type User'
+                                value={user.typeUser}
                                 required
-                                onChange={e => setFood({
-                                    ...food,
-                                    menu: e.target.value
+                                onChange={e => setUser({
+                                    ...user,
+                                    typeUser: e.target.value
                                 })}>
-                            <option value=''>-- Chọn thực đơn --</option>
-                            {menuList?.length > 0 &&
-                                    menuList.map((item, index) =>
-                                        <option key={index} value={item.id}>{item.name}</option>)}
+                            <option value=''>-- Chọn loại người dùng --</option>
+                            <option value={false}>Bình thường</option>
+                            <option value={true}>Quản trị viên</option>
                         </select>
                     </div>
                 </div>
 
-                {!isEmptyOrSpaces(food.imageUrl) && <div className="md:flex md:items-center mb-6">
+                {!isEmptyOrSpaces(user.imageUrl) && <div className="md:flex md:items-center mb-6">
                     <div className="md:w-1/3">
                         <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" htmlFor="inline-password">
                             Hình hiện tại
                         </label>
                     </div>
                     <div className="md:w-2/3">
-                        <img src={food.imageUrl} alt={food.name}/>
+                        <img src={user.imageUrl} alt={user.fullName}/>
                     </div>
                 </div>
                 }
@@ -153,8 +161,8 @@ const EditFood = () => {
                                 name='imageFile'
                                 title='Image File'
                                 accept='image/*'
-                                onChange={e => setFood({
-                                    ...food,
+                                onChange={e => setUser({
+                                    ...user,
                                     imageFile: e.target.files[0]
                                 })} className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500"/>
                     </div>
@@ -166,7 +174,7 @@ const EditFood = () => {
                         <button type="submit" className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
                             Thêm
                         </button>
-                        <Link to='/admin/foods' className="shadow bg-red-500 hover:bg-red-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded ml-2">
+                        <Link to='/admin/users' className="shadow bg-red-500 hover:bg-red-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded ml-2">
                             Hủy và quay lại
                         </Link>
                     </div>
@@ -176,4 +184,4 @@ const EditFood = () => {
     );
 }
 
-export default EditFood;
+export default EditUser;
