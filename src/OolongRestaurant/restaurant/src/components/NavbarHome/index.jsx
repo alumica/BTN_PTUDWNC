@@ -9,6 +9,7 @@ function NavbarHome() {
         <div className="flex font-montserrat2 px-3">
           <Link to={"/home"}className="mr-10 text-primary-black text-xl my-3">Home</Link>
           <Link to={"/menu"}className="mr-10 text-primary-black text-xl my-3">Menu</Link>
+          <Link to={"/albumfood"}className="mr-10 text-primary-black text-xl my-3">Album Food</Link>
           <Link to={"/about"}className="mr-10 text-primary-black text-xl my-3">About us</Link>
           <Link to={"/contact"}className="mr-10 text-primary-black text-xl my-3">Contact</Link>
           {/* Button */}
